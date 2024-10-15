@@ -345,14 +345,15 @@ performance_summary_d
 and plot it!
 
 ```{r TamirFig2}
+pos <- position_dodge(width = 1)
 performance_summary_d |>
   # your code here
   ggplot(aes(x=ConfrontationalGame, y=MeanImprovementScore, fill=MusicCondition)) +
-    geom_bar(position="dodge", stat="identity") + 
+    geom_bar(position=pos, stat="identity") + 
     geom_errorbar(
-      position="dodge", stat="identity",
+      position=pos, stat="identity",
       aes(ymin = MeanImprovementScore - SEMImprovementScore, 
-        ymax = MeanImprovementScore + SEMImprovementScore)) +
+        ymax = MeanImprovementScore + SEMImprovementScore), width=0.2) +
     scale_fill_brewer(palette="Set1")
 ```
 
