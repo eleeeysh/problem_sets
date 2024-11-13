@@ -5,3 +5,4 @@
 # Quarto outputs
 *_files/
 *.html
+.Rproj.user

@@ -88,7 +88,6 @@ Hint: enter `?dplyr::filter` into the console to check the documentation. What h
 ```{r}
 # your code here: exclude subjects that are marked as "DoNotUse"
 filtered_d <- d |> filter(is.na(DoNotUse))
-```
 
 It's good practice to assign a new variable name (in this case `filtered_d`) to a data frame when you change it in an important way, or apply a code chunk that shouldn't be run twice. This helps prevent you seeing different results when you run your code in chunks (and might run one multiple times, or skip it, etc.) vs. knit the document.
 
@@ -101,7 +100,7 @@ The dataset contains a bunch of columns we don't care about:
 To get rid of these, we'll use the `select` function to take only the columns we need.
 
 ```{r}
-filtered_d = filtered_d |> 
+filtered_d = filtered_d |>
   select(c("Subject", "Cond"), # Generally important columns for both hypotheses
          contains("Game"), # we want all the game columns for hypothesis 1
          -contains("Intro"), -c("WhichGames", "GameComments"), # except these
@@ -163,11 +162,18 @@ And you can convert the rating dataset! (Call the "Key" column "Measurement" and
 
 ```{r}
 rating_hyp_long_d = rating_hyp_d |>
+<<<<<<< HEAD:ps2.qmd
     pivot_longer(
       cols=starts_with("Game"),
       names_to="Measurement",
       values_to="Rating"
     )## your code here
+=======
+  pivot_longer(cols=-c("Subject","Cond"),
+               names_to = "Measurement",
+               values_to = "Rating")
+  
+>>>>>>> upstream/master:ps2/ps2.qmd
 head(rating_hyp_long_d)
 ```
 
@@ -178,10 +184,11 @@ The measurement column in each dataset now contains a bunch of different types o
 But first, a quick tiny demo about how mutate generally works:
 ```{r}
 tiny_demo_mutate <- head(performance_hyp_long_d, 10)
-
+tiny_demo_mutate
 tiny_demo_mutate = tiny_demo_mutate |>
   mutate(
-    
+    score_plus_one = Score + 1,
+    score_minus_one = Score - 1
   )
 
 ```
