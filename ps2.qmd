@@ -1,7 +1,7 @@
 ---
 title: "Psych201a, Problem Set 2: Tidying Data"
-author: "Andrew Lampinen, modified by Janna Wennberg"
-date: "Tuesday, October 15, 2024"
+author: "Andrew Lampinen, modified by Janna Wennberg, modified by Sihan Yang"
+date: "Monday, October 21, 2024"
 format:
   html:
     toc: true
@@ -35,7 +35,8 @@ d = read.spss("data/Tamiretal2008ReplicationData.sav", to.data.frame=T)
 Take a look at the data structure:
 
 ```{r}
-head(d)
+# comment out otherwise the rendered looks messy
+# head(d)
 ```
 
 This data is what we call **wide form** -- each subject is a single row, and the columns represent different observations. This is a somewhat inconvenient way of representing the data, for example if we wanted to do the same operation to each likert rating (for example normalize it to be in the range 0-1), we'd have to do it on each of the 40 or so rating columns. To avoid this, our eventual goal will be to convert the data into **long form**, where each row is a single observation. 
@@ -43,7 +44,8 @@ This data is what we call **wide form** -- each subject is a single row, and the
 For now, take a look at the column names to get a better idea of what all is in the dataset.
 
 ```{r}
-colnames(d)
+# comment out otherwise the rendered looks messy
+# colnames(d)
 ```
 
 And see if you can figure out what range the likert scores are in. What's the highest number on the likert scale, and what's the lowest? (Hint, `d$Game1Angry1` is one of the likert rating columns, and you may want to use `unique`)
@@ -73,7 +75,8 @@ First, we need to `filter` out any rows that should be excluded. According to th
 You can see participant 23's data and the fact that they did not do part 1 by looking at the last rows of the dataframe:
 
 ```{r}
-tail(d)
+# comment out otherwise the rendered looks messy
+# tail(d)
 ```
 
 Notice that participant 23 has missing values for part 1.
@@ -358,11 +361,6 @@ performance_summary_d |>
 ```
 
 (Bonus: also calculate the SEM in the summary data, and then add errorbars to the plot with `geom_errorbar`!)
-
-```{r}
-
-```
-
 
 Not quite as exact a replication of the effect as Fig. 1. This concurs with the [replication report](https://osf.io/7i2tf/), which says that the hypothesis 1 effect replicated, but hypothesis 2 did not. 
 
