@@ -57,7 +57,7 @@ qplot(
 ```{r}
 p <- ggplot(diamonds, aes(x = carat, y = price)) # first you set the aesthetic and dataset
 
-p <- p + geom_point() # then you add geoms
+# p <- p + geom_point() # then you add geoms
 
 p <- p + geom_point(aes(colour = carat)) # and you can keep doing this to add layers to the plot
 
@@ -68,7 +68,8 @@ Now you can try writing this as a single set of additions (e.g. one line of R co
 
 
 ```{r}
-## Your code here
+ggplot(data=diamonds, aes(x=carat, y=price)) +
+  geom_point(aes(color=carat))
 ```
 
 
@@ -91,6 +92,15 @@ One of the primary benefits of `ggplot2` is the use of facets - also known as sm
 
 ```{r}
 ## YOUR CODE HERE
+ggplot(
+  diamonds,
+  aes(
+    x = carat, y = price
+  )
+) +
+  geom_point() +
+  facet_grid(clarity ~ cut)
+
 ```
 
 But facets can also get overwhelming. Try to strike a good balance between color, shape, and faceting. 
@@ -98,7 +108,15 @@ But facets can also get overwhelming. Try to strike a good balance between color
 HINT: `facet_grid(. ~ x)` puts x on the columns, but `facet_wrap(~ x)` (no dot) *wraps* the facets. 
 
 ```{r}
-
+ggplot(
+  diamonds,
+  aes(
+    x = carat, y = price
+  )
+) +
+  geom_point() +
+  facet_wrap(~ cut)
+```
 ```
 
 
