@@ -5,30 +5,29 @@ format: html
 editor: visual
 ---
 
-
 # Visualization 2
 
-In this lecture, we will lift our `ggplot2` skills to the next level! 
+In this lecture, we will lift our `ggplot2` skills to the next level!
 
 ## Learning objectives
 
-- Deciding what plot is appropriate for what kind of data.  
-- Customizing plots: Take a sad plot and make it better. 
-- Saving plots. 
-- Making figure panels. 
-- Debugging. 
-- Making animations. 
-- Defining snippets. 
+-   Deciding what plot is appropriate for what kind of data.\
+-   Customizing plots: Take a sad plot and make it better.
+-   Saving plots.
+-   Making figure panels.
+-   Debugging.
+-   Making animations.
+-   Defining snippets.
 
 ## Install and load packages, load data, set theme
 
-Let's first install the new packages that you might not have yet. 
+Let's first install the new packages that you might not have yet.
 
 ```{r, eval=FALSE}
-install.packages(c("gganimate", "gapminder", "ggridges", "devtools", "png", "gifski", "patchwork"))
+# install.packages(c("gganimate", "gapminder", "ggridges", "devtools", "png", "gifski", "patchwork"))
 ```
 
-Now, let's load the packages that we need for these excercise 
+Now, let's load the packages that we need for these excercise
 
 ```{r, message=FALSE}
 library("knitr")     # for rendering the RMarkdown file
@@ -39,7 +38,7 @@ library("gapminder") # data available from Gapminder.org
 library("tidyverse") # for plotting (and many more cool things we'll discover later)
 ```
 
-And set some settings: 
+And set some settings:
 
 ```{r}
 # these options here change the formatting of how comments are rendered
@@ -54,7 +53,7 @@ theme_set(theme_classic() + #set the theme
             theme(text = element_text(size = 20))) #set the default text size
 ```
 
-And let's load the diamonds dataset we'll use 
+And let's load the diamonds dataset we'll use
 
 ```{r}
 df.diamonds = diamonds
@@ -62,7 +61,7 @@ df.diamonds = diamonds
 
 ## Overview of different plot types for different things
 
-Different plots work best for different kinds of data. Let's take a look at some. 
+Different plots work best for different kinds of data. Let's take a look at some.
 
 ### Proportions
 
@@ -75,14 +74,14 @@ ggplot(data = df.diamonds,
   geom_bar(color = "black")
 ```
 
-This bar chart shows for the different cuts (x-axis), the number of diamonds of different color. Stacked bar charts give a good general impression of the data. However, it's difficult to precisely compare different proportions. 
+This bar chart shows for the different cuts (x-axis), the number of diamonds of different color. Stacked bar charts give a good general impression of the data. However, it's difficult to precisely compare different proportions.
 
 #### Pie charts
 
-Pie charts have a bad reputation. And there are indeed a number of problems with pie charts: 
+Pie charts have a bad reputation. And there are indeed a number of problems with pie charts:
 
-- proportions are difficult to compare 
-- don't look good when there are many categories 
+-   proportions are difficult to compare
+-   don't look good when there are many categories
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -95,11 +94,11 @@ ggplot(data = df.diamonds,
 
 We can create a pie chart with `ggplot2` by changing the coordinate system using `coord_polar()`.
 
-If we are interested in comparing proportions and we don't have too many data points, then tables are a good alternative to showing figures. 
+If we are interested in comparing proportions and we don't have too many data points, then tables are a good alternative to showing figures.
 
 ### Comparisons
 
-Often we want to compare the data from many different conditions. And sometimes, it's also useful to get a sense for what the individual participant data look like. Here is a plot that achieves both. 
+Often we want to compare the data from many different conditions. And sometimes, it's also useful to get a sense for what the individual participant data look like. Here is a plot that achieves both.
 
 #### Means and individual data points
 
@@ -122,12 +121,9 @@ ggplot(data = df.diamonds[1:150, ],
              size = 2)
 ```
 
-Note that I'm only plotting the first 150 entries of the data here by setting `data = df.diamonds[1:150,]` in `gpplot()`. 
+Note that I'm only plotting the first 150 entries of the data here by setting `data = df.diamonds[1:150,]` in `gpplot()`.
 
-This plot shows means, bootstrapped confidence intervals, and individual data points. I've used two tricks to make the individual data points easier to see. 
-1. I've set the `alpha` attribute to make the points somewhat transparent.
-2. I've used the `position_jitter()` function to jitter the points horizontally.
-3. I've used `shape = 21` for displaying the mean. For this circle shape, we can set a `color` and `fill` (see Figure \@ref(fig:plotting-shapes))
+This plot shows means, bootstrapped confidence intervals, and individual data points. I've used two tricks to make the individual data points easier to see. 1. I've set the `alpha` attribute to make the points somewhat transparent. 2. I've used the `position_jitter()` function to jitter the points horizontally. 3. I've used `shape = 21` for displaying the mean. For this circle shape, we can set a `color` and `fill` (see Figure \@ref(fig:plotting-shapes))
 
 ```{r plotting-shapes, echo=FALSE, fig.cap="Different shapes that can be used for plotting."}
 # plot showing the different shapes 
@@ -153,7 +149,6 @@ ggplot(data = df.plot,
                              unit = "inch"))
 ```
 
-
 #### Boxplots
 
 Another way to get a sense for the distribution of the data is to use box plots.
@@ -165,29 +160,29 @@ ggplot(data = df.diamonds[1:500,],
   geom_boxplot()
 ```
 
-What do boxplots show? Here adapted from `help(geom_boxplot())`:  
+What do boxplots show? Here adapted from `help(geom_boxplot())`:
 
-> The boxplots show the median as a horizontal black line. The lower and upper hinges correspond to the first and third quartiles (the 25th and 75th percentiles) of the data. The whiskers (= black vertical lines) extend from the top or bottom of the hinge by at most 1.5 * IQR (where IQR is the inter-quartile range, or distance between the first and third quartiles). Data beyond the end of the whiskers are called "outlying" points and are plotted individually.
+> The boxplots show the median as a horizontal black line. The lower and upper hinges correspond to the first and third quartiles (the 25th and 75th percentiles) of the data. The whiskers (= black vertical lines) extend from the top or bottom of the hinge by at most 1.5 \* IQR (where IQR is the inter-quartile range, or distance between the first and third quartiles). Data beyond the end of the whiskers are called "outlying" points and are plotted individually.
 
-Personally, I'm not a big fan of boxplots. Many data sets are consistent with the same boxplot. 
+Personally, I'm not a big fan of boxplots. Many data sets are consistent with the same boxplot.
 
 ```{r box-plot-distributions1, echo=FALSE, fig.cap="Box plot distributions. Source: https://www.autodeskresearch.com/publications/samestats"}
 include_graphics("figures/boxplots.gif")
 ```
 
-Figure \@ref(fig:box-plot-distributions1) shows three different distributions that each correspond to the same boxplot. 
+Figure \@ref(fig:box-plot-distributions1) shows three different distributions that each correspond to the same boxplot.
 
-If there is not too much data, I recommend to plot jittered individual data points instead. If you do have a lot of data points, then violin plots can be helpful. 
+If there is not too much data, I recommend to plot jittered individual data points instead. If you do have a lot of data points, then violin plots can be helpful.
 
 ```{r box-plot-distributions2, echo=FALSE, fig.cap="Boxplot distributions. Source: https://www.autodeskresearch.com/publications/samestats"}
 include_graphics("figures/box_violin.gif")
 ```
 
-Figure \@ref(fig:box-plot-distributions2) shows the same raw data represented as jittered dots, boxplots, and violin plots.  
+Figure \@ref(fig:box-plot-distributions2) shows the same raw data represented as jittered dots, boxplots, and violin plots.
 
 #### Violin plots
 
-We make violin plots like so: 
+We make violin plots like so:
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -196,12 +191,12 @@ ggplot(data = df.diamonds,
   geom_violin()
 ```
 
-Violin plots are good for detecting bimodal distributions. They work well when: 
+Violin plots are good for detecting bimodal distributions. They work well when:
 
-1. You have many data points. 
-2. The data is continuous.
+1.  You have many data points.
+2.  The data is continuous.
 
-Violin plots don't work well for Likert-scale data (e.g. ratings on a discrete scale from 1 to 7). Here is a simple example: 
+Violin plots don't work well for Likert-scale data (e.g. ratings on a discrete scale from 1 to 7). Here is a simple example:
 
 ```{r}
 set.seed(1)
@@ -223,7 +218,7 @@ This represents a vase much better than it represents the data.
 
 #### Joy plots
 
-We can also show the distributions along the x-axis using the `geom_density_ridges()` function from the `ggridges` package. 
+We can also show the distributions along the x-axis using the `geom_density_ridges()` function from the `ggridges` package.
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -234,12 +229,26 @@ ggplot(data = df.diamonds,
 
 #### Practice plot 1
 
-Try to make the plot shown in Figure \@ref(fig:visualization2-practice1). Here is a tip: 
+Try to make the plot shown in Figure \@ref(fig:visualization2-practice1). Here is a tip:
 
-- For the data argument in `ggplot()` use: `df.diamonds[1:10000, ]` (this selects the first 10000 rows).
+-   For the data argument in `ggplot()` use: `df.diamonds[1:10000, ]` (this selects the first 10000 rows).
 
 ```{r}
 # write your code here
+ggplot(data = df.diamonds[1:10000,],
+       mapping = aes(x = cut,
+                     y = price)) +
+  geom_violin() + 
+  geom_point(position = position_jitter(width = 0.1,
+                                        height = 0.1),
+             alpha = 0.1) +
+  stat_summary(
+    fun='mean',
+    geom='point',
+    shape=21,
+    color='black',
+    fill='blue',
+    size=5)
 ```
 
 ```{r visualization2-practice1, echo=FALSE, fig.cap='Practice plot 1.'}
@@ -250,7 +259,7 @@ include_graphics("figures/vis2_practice_plot1.png")
 
 #### Scatter plots
 
-Scatter plots are great for looking at the relationship between two continuous variables. 
+Scatter plots are great for looking at the relationship between two continuous variables.
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -262,7 +271,7 @@ ggplot(data = df.diamonds,
 
 #### Raster plots
 
-These are useful for looking how a variable of interest varies as a function of two other variables. For example, when we are trying to fit a model with two parameters, we might be interested to see how well the model does for different combinations of these two parameters. Here, we'll plot what `carat` values diamonds of different `color` and `clarity` have. 
+These are useful for looking how a variable of interest varies as a function of two other variables. For example, when we are trying to fit a model with two parameters, we might be interested to see how well the model does for different combinations of these two parameters. Here, we'll plot what `carat` values diamonds of different `color` and `clarity` have.
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -273,7 +282,7 @@ ggplot(data = df.diamonds,
                   geom = "tile")
 ```
 
-Not too bad. Let's add a few tweaks to make it look nicer. 
+Not too bad. Let's add a few tweaks to make it look nicer.
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -288,11 +297,11 @@ ggplot(data = df.diamonds,
   labs(fill = "carat")
 ```
 
-I've added some outlines to the tiles by specifying `color = "black"` in `geom_tile()` and I've changed the scale for the fill gradient. I've defined the color for the low value to be "white", and for the high value to be "black." Finally, I've changed the lower and upper limit of the scale via the `limits` argument. Looks much better now! We see that diamonds with clarity `I1` and color `J` tend to have the highest `carat` values on average. 
+I've added some outlines to the tiles by specifying `color = "black"` in `geom_tile()` and I've changed the scale for the fill gradient. I've defined the color for the low value to be "white", and for the high value to be "black." Finally, I've changed the lower and upper limit of the scale via the `limits` argument. Looks much better now! We see that diamonds with clarity `I1` and color `J` tend to have the highest `carat` values on average.
 
 ### Temporal data
 
-Line plots are a good choice for temporal data. Here, I'll use the `txhousing` data that comes with the `ggplot2` package. The dataset contains information about housing sales in Texas. 
+Line plots are a good choice for temporal data. Here, I'll use the `txhousing` data that comes with the `ggplot2` package. The dataset contains information about housing sales in Texas.
 
 ```{r}
 
@@ -315,9 +324,9 @@ ggplot(data = df.plot,
                geom = "point") 
 ```
 
-The other part is fairly straightforward. I've used `stat_summary()` three times: First, to define the confidence interval as a `geom = "ribbon"`. Second, to show the lines connecting the means, and third to put the means as data points points on top of the lines. 
+The other part is fairly straightforward. I've used `stat_summary()` three times: First, to define the confidence interval as a `geom = "ribbon"`. Second, to show the lines connecting the means, and third to put the means as data points points on top of the lines.
 
-Let's tweak the figure some more to make it look real good. 
+Let's tweak the figure some more to make it look real good.
 
 ```{r}
 df.plot = txhousing %>% 
@@ -383,9 +392,9 @@ ggplot(data = df.plot,
 
 ## Customizing plots
 
-So far, we've seen a number of different ways of plotting data. Now, let's look into how to customize the plots. For example, we may want to change the axis labels, add a title, increase the font size. `ggplot2` let's you customize almost anything. 
+So far, we've seen a number of different ways of plotting data. Now, let's look into how to customize the plots. For example, we may want to change the axis labels, add a title, increase the font size. `ggplot2` let's you customize almost anything.
 
-Let's start simple. 
+Let's start simple.
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -397,7 +406,7 @@ ggplot(data = df.diamonds,
                geom = "linerange")
 ```
 
-This plot shows the average price for diamonds with a different quality of the cut, as well as the bootstrapped confidence intervals. Here are some things we can do to make it look nicer. 
+This plot shows the average price for diamonds with a different quality of the cut, as well as the bootstrapped confidence intervals. Here are some things we can do to make it look nicer.
 
 ```{r}
 ggplot(data = df.diamonds, 
@@ -443,11 +452,11 @@ ggplot(data = df.diamonds,
   )
 ```
 
-I've tweaked quite a few things here (and I've added comments to explain what's happening). Take a quick look at the `theme()` function to see all the things you can change. 
+I've tweaked quite a few things here (and I've added comments to explain what's happening). Take a quick look at the `theme()` function to see all the things you can change.
 
 ### Anatomy of a `ggplot`
 
-I suggest to use this general skeleton for creating a `ggplot`: 
+I suggest to use this general skeleton for creating a `ggplot`:
 
 ```{r, eval = F}
 # ggplot call with global aesthetics 
@@ -481,7 +490,7 @@ ggsave(filename = "super_nice_plot.pdf",
 
 ### Changing the order of things
 
-Sometimes we don't have a natural ordering of our independent variable. In that case, it's nice to show the data in order. 
+Sometimes we don't have a natural ordering of our independent variable. In that case, it's nice to show the data in order.
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -503,13 +512,11 @@ The `reorder()` function helps us to do just that. Now, the results are ordered 
 
 ### Dealing with legends
 
-Legends form an important part of many figures. However, it is often better to avoid legends if possible, and directly label the data. This way, the reader doesn't have to look back and forth between the plot and the legend to understand what's going on. 
+Legends form an important part of many figures. However, it is often better to avoid legends if possible, and directly label the data. This way, the reader doesn't have to look back and forth between the plot and the legend to understand what's going on.
 
-Here, we'll look into a few aspects that come up quite often. There are two main functions to manipulate legends with ggplot2 
-1. `theme()` (there are a number of arguments starting with `legend.`)
-2. `guide_legend()`
+Here, we'll look into a few aspects that come up quite often. There are two main functions to manipulate legends with ggplot2 1. `theme()` (there are a number of arguments starting with `legend.`) 2. `guide_legend()`
 
-Let's make a plot with a legend. 
+Let's make a plot with a legend.
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -520,7 +527,7 @@ ggplot(data = df.diamonds,
                geom = "point")
 ```
 
-Let's move the legend to the bottom of the plot: 
+Let's move the legend to the bottom of the plot:
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -532,11 +539,11 @@ ggplot(data = df.diamonds,
   theme(legend.position = "bottom")
 ```
 
-Let's change a few more things in the legend using the `guides()` function: 
+Let's change a few more things in the legend using the `guides()` function:
 
-- have 3 rows 
-- reverse the legend order 
-- make the points in the legend larger 
+-   have 3 rows
+-   reverse the legend order
+-   make the points in the legend larger
 
 ```{r}
 ggplot(data = df.diamonds,
@@ -554,26 +561,26 @@ ggplot(data = df.diamonds,
 
 ### Choosing good colors
 
-[Color brewer](http://colorbrewer2.org/) helps with finding colors that are colorblind safe and printfriendly. For more information on how to use color effectively see [here](http://socviz.co/refineplots.html#refineplots). 
+[Color brewer](http://colorbrewer2.org/) helps with finding colors that are colorblind safe and printfriendly. For more information on how to use color effectively see [here](http://socviz.co/refineplots.html#refineplots).
 
 ### Customizing themes
 
-For a given project, I often want all of my plots to share certain visual features such as the font type, font size, how the axes are displayed, etc. Instead of defining these for each individual plot, I can set a theme at the beginning of my project so that it applies to all the plots in this file. To do so, I use the `theme_set()` command: 
+For a given project, I often want all of my plots to share certain visual features such as the font type, font size, how the axes are displayed, etc. Instead of defining these for each individual plot, I can set a theme at the beginning of my project so that it applies to all the plots in this file. To do so, I use the `theme_set()` command:
 
 ```{r, eval=FALSE}
 theme_set(theme_classic() + #classic theme
             theme(text = element_text(size = 20))) #text size 
 ```
 
-Here, I've just defined that I want to use `theme_classic()` for all my plots, and that the text size should be 20. For any individual plot, I can still overwrite any of these defaults. 
+Here, I've just defined that I want to use `theme_classic()` for all my plots, and that the text size should be 20. For any individual plot, I can still overwrite any of these defaults.
 
 ## Saving plots
 
-To save plots, use the `ggsave()` command. Personally, I prefer to save my plots as pdf files. This way, the plot looks good no matter what size you need it to be. This means it'll look good both in presentations as well as in a paper. You can save the plot in any format that you like. 
+To save plots, use the `ggsave()` command. Personally, I prefer to save my plots as pdf files. This way, the plot looks good no matter what size you need it to be. This means it'll look good both in presentations as well as in a paper. You can save the plot in any format that you like.
 
-I strongly recommend to use a relative path to specify where the figure should be saved. This way, if you are sharing the project with someone else via Stanford Box, Dropbox, or Github, they will be able to run the code without errors. 
+I strongly recommend to use a relative path to specify where the figure should be saved. This way, if you are sharing the project with someone else via Stanford Box, Dropbox, or Github, they will be able to run the code without errors.
 
-Here is an example for how to save one of the plots that we've created above. 
+Here is an example for how to save one of the plots that we've created above.
 
 ```{r, results = "hold"}
 p1 = ggplot(data = df.diamonds,
@@ -603,13 +610,13 @@ ggsave(filename = "figures/diamond_plot.pdf",
        height = 6)
 ```
 
-Here, I'm saving the plot in the `figures` folder and it's name is `diamond_plot.pdf`. I also specify the width and height as the plot in inches (which is the default unit). 
+Here, I'm saving the plot in the `figures` folder and it's name is `diamond_plot.pdf`. I also specify the width and height as the plot in inches (which is the default unit).
 
 ## Creating figure panels
 
-Sometimes, we want to create a figure with several subfigures, each of which is labeled with a), b), etc. We have already learned how to make separate panels using `facet_wrap()` or `facet_grid()`. The R package `patchwork` makes it very easy to combine multiple plots. You can find out more about the package [here](https://patchwork.data-imaginist.com/articles/patchwork.html). 
+Sometimes, we want to create a figure with several subfigures, each of which is labeled with a), b), etc. We have already learned how to make separate panels using `facet_wrap()` or `facet_grid()`. The R package `patchwork` makes it very easy to combine multiple plots. You can find out more about the package [here](https://patchwork.data-imaginist.com/articles/patchwork.html).
 
-Let's combine a few plots that we've made above into one. 
+Let's combine a few plots that we've made above into one.
 
 ```{r}
 # first plot
@@ -665,22 +672,22 @@ p1 + (p2 + p3) +
 # ggsave("figures/combined_plot.png", width = 10, height = 6)
 ```
 
-Not a perfect plot yet, but you get the idea. To combine the plots, we defined that we would like p2 and p3 to be displayed in the same row using the `()` syntax. And we specified that we only want one column via the `plot_layout()` function. We also applied the same `theme_classic()` to all the plots using the `&` operator, and formatted how the plot tags should be displayed. For more info on how to use `patchwork`, take a look at the [readme](https://github.com/thomasp85/patchwork) on the github page. 
+Not a perfect plot yet, but you get the idea. To combine the plots, we defined that we would like p2 and p3 to be displayed in the same row using the `()` syntax. And we specified that we only want one column via the `plot_layout()` function. We also applied the same `theme_classic()` to all the plots using the `&` operator, and formatted how the plot tags should be displayed. For more info on how to use `patchwork`, take a look at the [readme](https://github.com/thomasp85/patchwork) on the github page.
 
-Other packages that provide additional functionality for combining multiple plots into one are 
+Other packages that provide additional functionality for combining multiple plots into one are
 
-- [`gridExtra`](https://cran.r-project.org/web/packages/gridExtra/index.html) and 
-- [`cowplot`](https://cran.r-project.org/web/packages/cowplot/index.html). You can find more information on how to lay out multiple plots [here](https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html).
+-   [`gridExtra`](https://cran.r-project.org/web/packages/gridExtra/index.html) and
+-   [`cowplot`](https://cran.r-project.org/web/packages/cowplot/index.html). You can find more information on how to lay out multiple plots [here](https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html).
 
-An alternative way for making these plots is to use Adobe Illustrator, Powerpoint, or Keynote. However, you want to make changing plots as easy as possible. Adobe Illustrator has a feature that allows you to link to files. This way, if you change the plot, the plot within the illustrator file gets updated automatically as well. 
+An alternative way for making these plots is to use Adobe Illustrator, Powerpoint, or Keynote. However, you want to make changing plots as easy as possible. Adobe Illustrator has a feature that allows you to link to files. This way, if you change the plot, the plot within the illustrator file gets updated automatically as well.
 
-If possible, it's __much__ better to do everything in R though so that your plot can easily be reproduced by someone else. 
+If possible, it's **much** better to do everything in R though so that your plot can easily be reproduced by someone else.
 
 ## Extra fancy
 
 ### Peeking behind the scenes
 
-Sometimes it can be helpful for debugging to take a look behind the scenes. Silently, `ggplot()` computes a data frame based on the information you pass to it. We can take a look at the data frame that's underlying the plot. 
+Sometimes it can be helpful for debugging to take a look behind the scenes. Silently, `ggplot()` computes a data frame based on the information you pass to it. We can take a look at the data frame that's underlying the plot.
 
 ```{r}
 p = ggplot(data = df.diamonds,
@@ -698,9 +705,9 @@ df.plot_info = build$data[[1]]
 dim(df.plot_info) # data frame dimensions
 ```
 
-I've called the `ggplot_build()` function on the ggplot2 object that we saved as `p`. I've then printed out the data associated with that plot object. The first thing we note about the data frame is how many entries it has, `r nrow(df.plot_info)`. That's good. This means there is one value for each of the 7 x 8 grids. The columns tell us what color was used for the `fill`, the `value` associated with each row, where each row is being displayed (`x` and `y`), etc.   
+I've called the `ggplot_build()` function on the ggplot2 object that we saved as `p`. I've then printed out the data associated with that plot object. The first thing we note about the data frame is how many entries it has, `r nrow(df.plot_info)`. That's good. This means there is one value for each of the 7 x 8 grids. The columns tell us what color was used for the `fill`, the `value` associated with each row, where each row is being displayed (`x` and `y`), etc.
 
-If a plot looks weird, it's worth taking a look behind the scenes. For example, something we thing we could have tried is the following (in fact, this is what I tried first): 
+If a plot looks weird, it's worth taking a look behind the scenes. For example, something we thing we could have tried is the following (in fact, this is what I tried first):
 
 ```{r}
 p = ggplot(data = df.diamonds,
@@ -717,13 +724,13 @@ df.plot_info = build$data[[1]]
 dim(df.plot_info) # data frame dimensions
 ```
 
-Why does this plot look different from the one before? What went wrong here? Notice that the data frame associated with the ggplot2 object has `r nrow(df.plot_info)` rows. So instead of plotting means here, we plotted all the individual data points. So what we are seeing here is just the top layer of many, many layers. 
+Why does this plot look different from the one before? What went wrong here? Notice that the data frame associated with the ggplot2 object has `r nrow(df.plot_info)` rows. So instead of plotting means here, we plotted all the individual data points. So what we are seeing here is just the top layer of many, many layers.
 
 ### Making animations
 
-Animated plots can be a great way to illustrate your data in presentations. The R package `gganimate` lets you do just that. 
+Animated plots can be a great way to illustrate your data in presentations. The R package `gganimate` lets you do just that.
 
-Here is an example showing how to use it. 
+Here is an example showing how to use it.
 
 ```{r, interval=1/60}
 ggplot(data = gapminder,
@@ -751,20 +758,19 @@ ggplot(data = gapminder,
 # anim_save(filename = "figures/life_gdp_animation.gif") # to save the animation
 ```
 
-This takes a while to run but it's worth the wait. The plot shows the relationship between GDP per capita (on the x-axis) and life expectancy (on the y-axis) changes across different years for the countries of different continents. The size of each dot represents the population size of the respective country. And different countries are shown in different colors. This animation is not super useful yet in that we don't know which continents and countries the different dots represent. I've added a label to the United States, China, and India. 
+This takes a while to run but it's worth the wait. The plot shows the relationship between GDP per capita (on the x-axis) and life expectancy (on the y-axis) changes across different years for the countries of different continents. The size of each dot represents the population size of the respective country. And different countries are shown in different colors. This animation is not super useful yet in that we don't know which continents and countries the different dots represent. I've added a label to the United States, China, and India.
 
-Note how little is required to define the `gganimate`-specific information! The `{frame_time}` variable changes the title for each frame. The `transition_time()` variable is set to `year`, and the kind of transition is set as 'linear' in `ease_aes()`. I've saved the animation as a gif in the figures folder. 
-We won't have time to go into more detail here but I encourage you to play around with `gganimate`. It's fun, looks cool, and (if done well) makes for a great slide in your next presentation! 
+Note how little is required to define the `gganimate`-specific information! The `{frame_time}` variable changes the title for each frame. The `transition_time()` variable is set to `year`, and the kind of transition is set as 'linear' in `ease_aes()`. I've saved the animation as a gif in the figures folder. We won't have time to go into more detail here but I encourage you to play around with `gganimate`. It's fun, looks cool, and (if done well) makes for a great slide in your next presentation!
 
 ### Shiny apps
 
-The package [`shiny`](https://shiny.rstudio.com/) makes it relatively easy to create interactive plots that can be hosted online. Here is a [gallery](https://shiny.rstudio.com/gallery/) with some examples. 
+The package [`shiny`](https://shiny.rstudio.com/) makes it relatively easy to create interactive plots that can be hosted online. Here is a [gallery](https://shiny.rstudio.com/gallery/) with some examples.
 
 ### Defining snippets
 
-Often, we want to create similar plots over and over again. One way to achieve this is by finding the original plot, copy and pasting it, and changing the bits that need changing. Another more flexible and faster way to do this is by using snippets. Snippets are short pieces of code that 
+Often, we want to create similar plots over and over again. One way to achieve this is by finding the original plot, copy and pasting it, and changing the bits that need changing. Another more flexible and faster way to do this is by using snippets. Snippets are short pieces of code that
 
-Here are some snippets I use: 
+Here are some snippets I use:
 
 ```{r, eval=FALSE}
 snippet sngg
@@ -777,53 +783,52 @@ snippet sndf
 		${0}
 ```
 
-To make a bar plot, I now only need to type `snbar` and then hit TAB to activate the snippet. I can then cycle through the bits in the code that are marked with `${Number:word}` by hitting TAB again. 
+To make a bar plot, I now only need to type `snbar` and then hit TAB to activate the snippet. I can then cycle through the bits in the code that are marked with `${Number:word}` by hitting TAB again.
 
-In RStudio, you can change and add snippets by going to Tools --> Global Options... --> Code --> Edit Snippets. Make sure to set the tick mark in front of Enable Code Snippets (see Figure \@ref(fig:code-snippets)). 
-). 
+In RStudio, you can change and add snippets by going to Tools --\> Global Options... --\> Code --\> Edit Snippets. Make sure to set the tick mark in front of Enable Code Snippets (see Figure \@ref(fig:code-snippets)). ).
 
 ```{r code-snippets, echo=FALSE, fig.cap="Enable code snippets."}
 include_graphics("figures/snippets.png")
 ```
 
-To edit code snippets faster, run this command from the `usethis` package. Make sure to install the package first if you don't have it yet. 
+To edit code snippets faster, run this command from the `usethis` package. Make sure to install the package first if you don't have it yet.
 
 ```{r, eval=FALSE}
 # install.packages("usethis")
 usethis::edit_rstudio_snippets()
 ```
 
-This command opens up a separate tab in RStudio called `r.snippets` so that you can make new snippets and adapt old ones more quickly. Take a look at the snippets that RStudio already comes with. And then, make some new ones! By using snippets you will be able to avoid typing the same code over and over again, and you won't have to memorize as much, too. 
+This command opens up a separate tab in RStudio called `r.snippets` so that you can make new snippets and adapt old ones more quickly. Take a look at the snippets that RStudio already comes with. And then, make some new ones! By using snippets you will be able to avoid typing the same code over and over again, and you won't have to memorize as much, too.
 
 ## Additional resources
 
 ### Cheatsheets
 
-- [shiny](figures/shiny.pdf) --> interactive plots 
+-   [shiny](figures/shiny.pdf) --\> interactive plots
 
 ### Data camp courses
 
-- [shiny](https://www.datacamp.com/courses/building-web-applications-in-r-with-shiny-case-studies)
+-   [shiny](https://www.datacamp.com/courses/building-web-applications-in-r-with-shiny-case-studies)
 
 ### Books and chapters
 
-- [R for Data Science book](http://r4ds.had.co.nz/)
-	+ [Data visualization](http://r4ds.had.co.nz/data-visualisation.html)
-	+ [Graphics for communication](http://r4ds.had.co.nz/graphics-for-communication.html)
-- [Data Visualization -- A practical introduction (by Kieran Healy)](http://socviz.co/)
-  + [Refine your plots](http://socviz.co/refineplots.html#refineplots)
+-   [R for Data Science book](http://r4ds.had.co.nz/)
+    -   [Data visualization](http://r4ds.had.co.nz/data-visualisation.html)
+    -   [Graphics for communication](http://r4ds.had.co.nz/graphics-for-communication.html)
+-   [Data Visualization -- A practical introduction (by Kieran Healy)](http://socviz.co/)
+    -   [Refine your plots](http://socviz.co/refineplots.html#refineplots)
 
 ### Misc
 
-- [ggplot2 extensions](https://z3tt.github.io/exciting-extensions/slides.html?s=09#/layers) --> gallery of ggplot2 extension packages 
-- [ggplot2 gui](https://github.com/dreamRs/esquisse) --> ggplot2 extension package 
-- [ggplot2 visualizations with code](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html) --> gallery of plots with code
-- [Color brewer](http://colorbrewer2.org/) --> for finding colors 
-- [shiny apps examples](https://sites.psu.edu/shinyapps/) --> shiny apps examples that focus on statistics teaching (made by students at PennState) 
+-   [ggplot2 extensions](https://z3tt.github.io/exciting-extensions/slides.html?s=09#/layers) --\> gallery of ggplot2 extension packages
+-   [ggplot2 gui](https://github.com/dreamRs/esquisse) --\> ggplot2 extension package
+-   [ggplot2 visualizations with code](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html) --\> gallery of plots with code
+-   [Color brewer](http://colorbrewer2.org/) --\> for finding colors
+-   [shiny apps examples](https://sites.psu.edu/shinyapps/) --\> shiny apps examples that focus on statistics teaching (made by students at PennState)
 
 ## Session info
 
-Information about this R session including which version of R was used, and what packages were loaded. 
+Information about this R session including which version of R was used, and what packages were loaded.
 
 ```{r}
 sessionInfo()
